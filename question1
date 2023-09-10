@@ -1,0 +1,30 @@
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# Sample data as an example
+data = {
+    "items": [
+        {"id": 1, "name": "Item 1"},
+        {"id": 2, "name": "Item 2"},
+        {"id": 3, "name": "Item 3"}
+    ]
+}
+
+# GET request handler
+@app.route('/api/items', methods=['GET'])
+def get_items():
+    return jsonify(data)
+
+# POST request handler
+@app.route('/api/items', methods=['POST'])
+def create_item():
+    new_item = request.get_json()
+    if new_item:
+        data["items"].append(new_item)
+        return jsonify({"message": "Item created successfully"}), 201
+    else:
+        return jsonify({"message": "Invalid request data"}), 400
+
+if __name__ == '__main__':
+    app.run(host='localhost', port=8008)
